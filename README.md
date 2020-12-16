@@ -3,6 +3,8 @@
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![GH-actions](https://github.com/pachamaltese/censo2017/workflows/R-CMD-check/badge.svg)](https://github.com/pachamaltese/censo2017/actions)
 [![codecov](https://codecov.io/gh/pachamaltese/censo2017/branch/main/graph/badge.svg?token=XI59cmGd15)](https://codecov.io/gh/pachamaltese/censo2017)
+[![CRAN status](https://www.r-pkg.org/badges/version/censo2017)](https://CRAN.R-project.org/package=censo2017)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4277761.svg)](https://doi.org/10.5281/zenodo.4277761)
 <!-- badges: end -->
 
 # Acerca de
@@ -10,6 +12,11 @@
 Provee un acceso conveniente a mas de 17 millones de registros de la base de datos del Censo 2017. Los datos fueron importados desde el DVD oficial del INE usando el Convertidor REDATAM creado por Pablo De Grande y ademas se proporcionan los mapas que acompanian a estos datos.
 
 # Instalacion
+
+Version estable
+```
+install.packages("censo2017")
+```
 
 Version de desarrollo
 ```
@@ -36,6 +43,30 @@ Los cambios concretos respecto de la base original son los siguientes:
 * Tambien inclui las observaciones 16054 to 16060 en la variable `zonaloc_ref_id`. Esto se debio a que era necesario para crear una llave foranea desde la tabla `mapa_zonas` y vincular el `geocodigo` (no todas las zonas del mapa estan presentes en los datos del Censo).
 
 Ademas de estos datos, libere la [descripcion de variables](https://db-edu.pacha.dev/censo2017-descripcion-variables.xml), donde se puede explorar la estructura de arbol de los datos REDATAM y sus etiquetas (e.g. la variable `p15` significa "maximo nivel educacional obtenido", donde `13` significa "titulo profesional").
+
+# Cita este trabajo
+
+Si usas `censo2017` en trabajos academicos u otro tipo de publicacion por favor usa la siguiente cita:
+
+```
+Mauricio Vargas (2020). censo2017: Base de Datos de Facil Acceso del Censo
+  2017 de Chile (2017 Chilean Census Easy Access Database). R package version
+  0.1. https://pacha.dev/censo2017/
+```
+
+Entrada para BibTeX:
+
+```
+@Manual{,
+  title = {censo2017: Base de Datos de Facil Acceso del Censo 2017 de Chile
+(2017 Chilean Census Easy Access Database)},
+  author = {Mauricio Vargas},
+  year = {2020},
+  note = {R package version 0.1},
+  url = {https://pacha.dev/censo2017/},
+  doi = {10.5281/zenodo.4277761}
+}
+```
 
 # Agradecimientos
 

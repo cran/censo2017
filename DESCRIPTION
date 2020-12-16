@@ -1,7 +1,7 @@
 Package: censo2017
 Title: Base de Datos de Facil Acceso del Censo 2017 de Chile (2017
         Chilean Census Easy Access Database)
-Version: 0.1
+Version: 0.2
 Authors@R: c( 
         person(given = "Mauricio",
                family = "Vargas",
@@ -32,17 +32,15 @@ License: CC0
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
-VignetteBuilder: knitr
 Imports: DBI, RSQLite, rappdirs, httr, R.utils, tibble, purrr, sf, cli,
         crayon, rstudioapi
-Suggests: devtools, usethis, testthat, covr, dplyr, dbplyr, ggplot2,
-        knitr, rmarkdown, chilemapas
+Suggests: testthat, covr, knitr, dplyr, dbplyr
 Depends: R (>= 3.5)
 NeedsCompilation: no
-Packaged: 2020-11-05 18:49:45 UTC; pacha
+Packaged: 2020-12-16 00:06:35 UTC; pacha
 Author: Mauricio Vargas [aut, cre] (<https://orcid.org/0000-0003-1017-7574>),
   Juan Correa [ctb],
   Instituto Nacional de Estadisticas (INE) [dtc]
 Maintainer: Mauricio Vargas <mvargas@dcc.uchile.cl>
 Repository: CRAN
-Date/Publication: 2020-11-11 09:10:15 UTC
+Date/Publication: 2020-12-16 05:30:05 UTC
