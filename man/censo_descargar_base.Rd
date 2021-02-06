@@ -12,10 +12,10 @@ disponible en GitHub. Se pueden ver todas las versiones en
 \url{https://github.com/pachamaltese/censo2017/releases}.}
 }
 \description{
-Este comando descarga la base de datos completa como un unico archivo bz2 que
-se descomprime para dejar disponible la base de datos local. La descarga es
-1 GB y la base de datos usa 8 GB en disco. Nota: se usa bz2 para evitar el
-truncamiento al descomprimir zip en algunos sistemas operativos.
+Este comando descarga la base de datos completa como un unico archivo zip que
+se descomprime para crear la base de datos local. Si no quieres descargar la
+base de datos en tu home, ejecuta usethis::edit_r_environ() para crear la
+variable de entorno CENSO_BBDD_DIR con la ruta.
 }
 \examples{
 \donttest{

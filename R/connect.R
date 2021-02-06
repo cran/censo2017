@@ -1,14 +1,10 @@
 censo_path <- function() {
-  duckdb_version <- utils::packageVersion("duckdb")
   sys_censo_path <- Sys.getenv("CENSO_BBDD_DIR")
   sys_censo_path <- gsub("\\\\", "/", sys_censo_path)
   if (sys_censo_path == "") {
-    return(gsub("\\\\", "/", paste0(
-      tools::R_user_dir("censo2017"),
-      "/duckdb-", duckdb_version
-    )))  } else {
-    return(gsub("\\\\", "/", paste0(sys_censo_path, "/duckdb-",
-                                    duckdb_version)))
+    return(gsub("\\\\", "/", tools::R_user_dir("censo2017")))
+  } else {
+    return(gsub("\\\\", "/", sys_censo_path))
   }
 }
 
@@ -22,7 +18,7 @@ censo_check_status <- function() {
 #' Conexion a la Base de Datos del Censo
 #'
 #' Devuelve una conexion a la base de datos local. Esto corresponde a una
-#' conexion a una base 'DuckDB' compatible con DBI. A diferencia de
+#' conexion a una base DuckDB compatible con DBI. A diferencia de
 #' [censo2017::censo_tabla()], esta funcion es mas flexible y se puede usar con
 #' dbplyr para leer unicamente lo que se necesita o directamente con DBI para
 #' usar comandos SQL.
@@ -43,7 +39,11 @@ censo_check_status <- function() {
 #'  )
 #' }
 censo_bbdd <- function(dir = censo_path()) {
+  duckdb_version <- utils::packageVersion("duckdb")
+  db_file <- paste0(dir, "/censo2017_duckdb_v", gsub("\\.", "", duckdb_version), ".duckdb")
+  
   db <- mget("censo_bbdd", envir = censo_cache, ifnotfound = NA)[[1]]
+  
   if (inherits(db, "DBIConnection")) {
     if (DBI::dbIsValid(db)) {
       return(db)
@@ -55,7 +55,7 @@ censo_bbdd <- function(dir = censo_path()) {
   tryCatch({
     db <- DBI::dbConnect(
       duckdb::duckdb(),
-      paste0(dir, "/censo2017.duckdb")
+      db_file
     )
   },
   error = function(e) {
@@ -94,11 +94,12 @@ censo_bbdd <- function(dir = censo_path()) {
 #'   censo_tabla("comunas")
 #' }
 censo_tabla <- function(tabla) {
-  if (any(tabla %in% grep("mapa_", censo_tables(), value = T))) {
-    df <- sf::st_read(censo_bbdd(), tabla)
-  } else {
-    df <- tibble::as_tibble(DBI::dbReadTable(censo_bbdd(), tabla))
-  }
+  # if (any(tabla %in% grep("mapa_", censo_tables(), value = T))) {
+  #   df <- sf::st_read(censo_bbdd(), tabla, as_tibble = TRUE, quiet = TRUE)
+  # } else {
+  #   df <- tibble::as_tibble(DBI::dbReadTable(censo_bbdd(), tabla))
+  # }
+  df <- tibble::as_tibble(DBI::dbReadTable(censo_bbdd(), tabla))
   return(df)
 }
 
@@ -118,7 +119,7 @@ censo_desconectar_base <- function() {
 censo_db_disconnect_ <- function(environment = censo_cache) {
   db <- mget("censo_bbdd", envir = censo_cache, ifnotfound = NA)[[1]]
   if (inherits(db, "DBIConnection")) {
-    duckdb::dbDisconnect(db, shutdown = TRUE)
+    DBI::dbDisconnect(db, shutdown = TRUE)
   }
   observer <- getOption("connectionObserver")
   if (!is.null(observer)) {
@@ -149,8 +150,7 @@ censo_estado <- function(msg = TRUE) {
     out <- TRUE
   } else {
     status_msg <- crayon::red(paste(cli::symbol$cross,
-    "La base de datos local del Censo 2017 esta vacia o daniada.
-  Descargala con censo_descargar_base()."))
+    "La base de datos local del Censo 2017 esta vacia, daniada o no es compatible con tu version de duckdb. Descargala con censo_descargar_base()."))
     out <- FALSE
   }
   if (msg) msg(status_msg)
@@ -158,9 +158,12 @@ censo_estado <- function(msg = TRUE) {
 }
 
 censo_tables <- function() {
-  c("comunas", "hogares", "mapa_comunas", "mapa_provincias",
-    "mapa_regiones", "mapa_zonas", "personas", "provincias",
-    "regiones", "viviendas", "zonas", "metadata")
+  # c("comunas", "hogares", "mapa_comunas", "mapa_provincias",
+  #   "mapa_regiones", "mapa_zonas", "personas", "provincias",
+  #   "regiones", "viviendas", "zonas", "metadatos")
+  
+  c("comunas", "hogares", "personas", "provincias",
+    "regiones", "viviendas", "zonas", "metadatos")
 }
 
 censo_cache <- new.env()
