@@ -1,6 +1,6 @@
 msg <- function(..., startup = FALSE) {
   if (startup) {
-    if (!isTRUE(getOption("yotover.quiet"))) {
+    if (!isTRUE(getOption("censo2017.quiet"))) {
       packageStartupMessage(text_col(...))
     }
   } else {
@@ -29,4 +29,15 @@ in_chk <- function() {
           sapply(sys.calls(), function(a) paste(deparse(a), collapse = "\n"))
     )
   )
+}
+
+read_table_error <- function(e) {
+  e <- as.character(e)
+  # return(e)
+  msg <- c(
+    sprintf("No esta disponible la tabla %s.", get("tabla", envir = 1)),
+    "\nVerifica que escribiste el nombre correctamente y que instalaste los",
+    "\ndatos con censo_descargar_base()."
+  )
+  stop(msg, call. = FALSE)
 }

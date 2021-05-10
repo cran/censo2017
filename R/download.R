@@ -7,26 +7,22 @@
 #'
 #' @param ver La version a descargar. Por defecto es la ultima version 
 #' disponible en GitHub. Se pueden ver todas las versiones en
-#' <https://github.com/pachamaltese/censo2017/releases>.
+#' <https://github.com/ropensci/censo2017/releases>.
 #'
 #' @return NULL
 #' @export
 #'
 #' @examples
-#' \donttest{
-#' \dontrun{
-#' censo_descargar_base()
-#' }
-#' }
+#' \dontrun{ censo_descargar_base() }
 censo_descargar_base <- function(ver = NULL) {
   msg("Descargando la base de datos desde GitHub...")
-  
+
   destdir <- tempdir()
   dir <- censo_path()
   
   suppressWarnings(try(dir.create(dir, recursive = TRUE)))
   
-  zfile <- get_gh_release_file("pachamaltese/censo2017",
+  zfile <- get_gh_release_file("ropensci/censo2017",
                                tag_name = ver,
                                dir = destdir
   )
@@ -43,17 +39,17 @@ censo_descargar_base <- function(ver = NULL) {
   
   if (!any(grepl(db_pattern, existing_files))) {
     try(censo_borrar_base())
-    
   }
   
   utils::unzip(zfile, overwrite = TRUE, exdir = destdir)
+  unlink(zfile)
   
   finp_tsv <- list.files(destdir, full.names = TRUE, pattern = "tsv")
-  # finp_shp <- list.files(destdir, full.names = TRUE, pattern = "shp")
-  
+
   invisible(create_schema())
   
   for (x in seq_along(finp_tsv)) {
+
     tout <- gsub(".*/", "", gsub("\\.tsv", "", finp_tsv[x]))
     
     msg(sprintf("Creando tabla %s ...", tout))
@@ -72,23 +68,10 @@ censo_descargar_base <- function(ver = NULL) {
     )
     
     DBI::dbDisconnect(con, shutdown = TRUE)
+    
+    unlink(finp_tsv[x])
     invisible(gc())
   }
-  
-  # for (x in seq_along(finp_shp)) {
-  #   tout <- gsub(".*/", "", gsub("\\.shp", "", finp_shp[x]))
-  # 
-  #   msg(sprintf("Creando tabla %s ...", tout))
-  # 
-  #   con <- censo_bbdd()
-  # 
-  #   d <- sf::st_read(finp_shp[x], quiet = TRUE)
-  #   suppressMessages(DBI::dbWriteTable(con, tout, d, append = T, temporary = F))
-  # 
-  #   DBI::dbDisconnect(con, shutdown = TRUE)
-  #   rm(d)
-  #   invisible(gc())
-  # }
   
   metadatos <- data.frame(version_duckdb = utils::packageVersion("duckdb"),
                           fecha_modificacion = Sys.time())

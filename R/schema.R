@@ -40,55 +40,6 @@ create_schema <- function() {
 	tot_nucleos INTEGER NULL)"
   )
   
-#   # mapa comunas ----
-#   
-#   DBI::dbSendQuery(con, "DROP TABLE IF EXISTS mapa_comunas")
-#   
-#   DBI::dbSendQuery(
-#     con,
-#     "CREATE TABLE mapa_comunas (
-# 	region VARCHAR(2) NULL,
-# 	provincia VARCHAR(3) NULL,
-# 	comuna VARCHAR(5) NOT NULL,
-#   geometry VARCHAR NULL)"
-#   )
-#   
-#   # mapa provincias ----
-#   
-#   DBI::dbSendQuery(con, "DROP TABLE IF EXISTS mapa_provincias")
-#   
-#   DBI::dbSendQuery(
-#     con,
-#     "CREATE TABLE mapa_provincias (
-# 	region VARCHAR(2) NULL,
-# 	provincia VARCHAR(3) NOT NULL,
-#   geometry VARCHAR NULL)"
-#   )
-#   
-#   # mapa regiones ----
-#   
-#   DBI::dbSendQuery(con, "DROP TABLE IF EXISTS mapa_regiones")
-#   
-#   DBI::dbSendQuery(
-#     con,
-#     "CREATE TABLE mapa_regiones (
-# 	region VARCHAR(2) NOT NULL,
-#   geometry VARCHAR NULL);"
-#   )
-#   
-#   # mapa zonas ----
-#   DBI::dbSendQuery(con, "DROP TABLE IF EXISTS mapa_zonas")
-#   
-#   DBI::dbSendQuery(
-#     con,
-#     "CREATE TABLE mapa_zonas (
-# 	region VARCHAR(2) NULL,
-# 	provincia VARCHAR(3) NULL,
-# 	comuna VARCHAR(5) NULL,
-# 	geocodigo VARCHAR(11) NOT NULL,
-#   geometry VARCHAR NULL)"
-#   )
-  
   # personas ----
   
   DBI::dbSendQuery(con, "DROP TABLE IF EXISTS personas")
@@ -197,6 +148,29 @@ create_schema <- function() {
 	fecha_modificacion VARCHAR NOT NULL)"
   )
   
+  # variables ----
+  
+  DBI::dbSendQuery(con, "DROP TABLE IF EXISTS variables")
+  
+  DBI::dbSendQuery(
+    con,
+    "CREATE TABLE variables (
+	tabla VARCHAR NULL,
+	variable VARCHAR NULL,
+  descripcion VARCHAR NULL,
+  tipo VARCHAR NULL,
+  rango VARCHAR NULL)"
+  )
+  
+  DBI::dbSendQuery(
+    con,
+    "CREATE TABLE variables_codificacion (
+	tabla VARCHAR NULL,
+	variable VARCHAR NULL,
+	valor INTEGER NULL,
+  descripcion VARCHAR NULL)"
+  )
+  
   # zonas ----
   
   DBI::dbSendQuery(con, "DROP TABLE IF EXISTS zonas")
@@ -211,20 +185,11 @@ create_schema <- function() {
   
   # indexes ----
   
-  DBI::dbSendQuery(con, "CREATE UNIQUE INDEX comunas_redcoden ON comunas (redcoden)")
-  DBI::dbSendQuery(con, "CREATE UNIQUE INDEX provincias_redcoden ON provincias (redcoden)")
-  DBI::dbSendQuery(con, "CREATE UNIQUE INDEX regiones_redcoden ON regiones (redcoden)")
-  
   DBI::dbSendQuery(con, "CREATE UNIQUE INDEX hogares_hogar_ref_id ON hogares (hogar_ref_id)")
   DBI::dbSendQuery(con, "CREATE UNIQUE INDEX viviendas_vivienda_ref_id ON viviendas (vivienda_ref_id)")
   
   DBI::dbSendQuery(con, "CREATE UNIQUE INDEX zonas_zonaloc_ref_id ON zonas (zonaloc_ref_id)")
   DBI::dbSendQuery(con, "CREATE UNIQUE INDEX zonas_geocodigo ON zonas (geocodigo)")
-  
-  # DBI::dbSendQuery(con, "CREATE INDEX mapa_comunas_comuna ON mapa_comunas (comuna)")
-  # DBI::dbSendQuery(con, "CREATE INDEX mapa_provincias_provincia ON mapa_provincias (provincia)")
-  # DBI::dbSendQuery(con, "CREATE INDEX mapa_regiones_region ON mapa_regiones (region)")
-  # DBI::dbSendQuery(con, "CREATE INDEX mapa_zonas_geocodigo ON mapa_zonas (geocodigo)")
   
   # disconnect ----
   

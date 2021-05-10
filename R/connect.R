@@ -30,7 +30,7 @@ censo_check_status <- function() {
 #' @export
 #'
 #' @examples
-#' if (censo_estado()) {
+#' \dontrun{
 #'  DBI::dbListTables(censo_bbdd())
 #'
 #'  DBI::dbGetQuery(
@@ -81,25 +81,19 @@ censo_bbdd <- function(dir = censo_path()) {
 #' Tablas Completas de la Base de Datos del Censo
 #'
 #' Devuelve una tabla completa de la base de datos. Para entregar datos
-#' filtrados previamente se debe usar [censo2017::censo_bbdd()]. Esta funcion
-#' puede ser especialmente util para obtener los mapas y usarlos directamente
-#' con tm o ggplot2, sin necesidad de transformar las columnas de geometrias.
+#' filtrados previamente se debe usar [censo2017::censo_bbdd()].
 #'
 #' @param tabla Una cadena de texto indicando la tabla a extraer
 #' @return Un tibble
 #' @export
 #'
 #' @examples
-#' if (censo_estado()) {
-#'   censo_tabla("comunas")
-#' }
+#' \dontrun{ censo_tabla("comunas") }
 censo_tabla <- function(tabla) {
-  # if (any(tabla %in% grep("mapa_", censo_tables(), value = T))) {
-  #   df <- sf::st_read(censo_bbdd(), tabla, as_tibble = TRUE, quiet = TRUE)
-  # } else {
-  #   df <- tibble::as_tibble(DBI::dbReadTable(censo_bbdd(), tabla))
-  # }
-  df <- tibble::as_tibble(DBI::dbReadTable(censo_bbdd(), tabla))
+  df <- tryCatch(
+    tibble::as_tibble(DBI::dbReadTable(censo_bbdd(), tabla)),
+    error = function(e) { read_table_error(e) }
+  )
   return(df)
 }
 
@@ -139,7 +133,7 @@ censo_db_disconnect_ <- function(environment = censo_cache) {
 #' FALSE  en caso contrario (invisible).
 #' @export
 #' @examples
-#' censo_estado()
+#' \dontrun{ censo_estado() }
 censo_estado <- function(msg = TRUE) {
   expected_tables <- sort(censo_tables())
   existing_tables <- sort(DBI::dbListTables(censo_bbdd()))
@@ -158,12 +152,9 @@ censo_estado <- function(msg = TRUE) {
 }
 
 censo_tables <- function() {
-  # c("comunas", "hogares", "mapa_comunas", "mapa_provincias",
-  #   "mapa_regiones", "mapa_zonas", "personas", "provincias",
-  #   "regiones", "viviendas", "zonas", "metadatos")
-  
   c("comunas", "hogares", "personas", "provincias",
-    "regiones", "viviendas", "zonas", "metadatos")
+    "regiones", "viviendas", "zonas", 
+    "variables", "variables_codificacion", "metadatos")
 }
 
 censo_cache <- new.env()
