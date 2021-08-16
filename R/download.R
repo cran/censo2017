@@ -3,7 +3,7 @@
 #' Este comando descarga la base de datos completa como un unico archivo zip que
 #' se descomprime para crear la base de datos local. Si no quieres descargar la 
 #' base de datos en tu home, ejecuta usethis::edit_r_environ() para crear la 
-#' variable de entorno CENSO_BBDD_DIR con la ruta.
+#' variable de entorno CENSO2017_DIR con la ruta.
 #'
 #' @param ver La version a descargar. Por defecto es la ultima version 
 #' disponible en GitHub. Se pueden ver todas las versiones en
@@ -13,8 +13,21 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{ censo_descargar_base() }
-censo_descargar_base <- function(ver = NULL) {
+#' \dontrun{ censo_descargar() }
+censo_descargar <- function(ver = NULL) {
+  duckdb_version <- utils::packageVersion("duckdb")
+  db_pattern <- paste0("v", gsub("\\.", "", duckdb_version), ".sql$")
+  
+  duckdb_current_files <- list.files(censo_path(), db_pattern, full.names = T)
+  
+  if (length(duckdb_current_files) > 0 && 
+      # avoid listing initial empty duckdb files
+      all(file.size(duckdb_current_files) > 5000000000)) {
+    msg("Ya existe una base del censo para tu version de DuckDB.")
+    msg("Si realmente quieres descargar la base nuevamente, ejecuta censo_eliminar() y luego descarga.")
+    return(invisible())
+  }
+  
   msg("Descargando la base de datos desde GitHub...")
 
   destdir <- tempdir()
@@ -28,19 +41,12 @@ censo_descargar_base <- function(ver = NULL) {
   )
   ver <- attr(zfile, "ver")
   
-  msg("Descomprimiendo la base de datos local...")
+  suppressWarnings(try(censo_desconectar()))
   
-  suppressWarnings(try(censo_desconectar_base()))
+  msg("Borrando las versiones antiguas de la base que pudiera haber...\n")
+  censo_eliminar(preguntar = FALSE)
   
-  duckdb_version <- utils::packageVersion("duckdb")
-  db_pattern <- paste0("v", gsub("\\.", "", duckdb_version), ".duckdb")
-  
-  existing_files <- list.files(censo_path())
-  
-  if (!any(grepl(db_pattern, existing_files))) {
-    try(censo_borrar_base())
-  }
-  
+  msg("Descomprimiendo los archivos necesarios...")
   utils::unzip(zfile, overwrite = TRUE, exdir = destdir)
   unlink(zfile)
   
@@ -54,7 +60,7 @@ censo_descargar_base <- function(ver = NULL) {
     
     msg(sprintf("Creando tabla %s ...", tout))
     
-    con <- censo_bbdd()
+    con <- censo_conectar()
     
     suppressMessages(
       DBI::dbExecute(
@@ -78,18 +84,13 @@ censo_descargar_base <- function(ver = NULL) {
   metadatos$version_duckdb <- as.character(metadatos$version_duckdb)
   metadatos$fecha_modificacion <- as.character(metadatos$fecha_modificacion)
   
-  con <- censo_bbdd()
+  con <- censo_conectar()
   suppressMessages(DBI::dbWriteTable(con, "metadatos", metadatos, append = T, temporary = F))
   DBI::dbDisconnect(con, shutdown = TRUE)
   
-  unlink(destdir, recursive = TRUE)
-  
-  invisible(DBI::dbListTables(censo_bbdd()))
-  censo_desconectar_base()
-  
   update_censo_pane()
-  censo_panel()
-  censo_estado()
+  censo_pane()
+  censo_status()
 }
 
 #' Descarga los archivos tsv/shp desde GitHub

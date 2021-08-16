@@ -21,13 +21,13 @@ Provee un acceso conveniente a mas de 17 millones de registros
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/ropensci/censo2017/}
+  \item \url{https://docs.ropensci.org/censo2017/}
   \item Report bugs at \url{https://github.com/ropensci/censo2017/issues/}
 }
 
 }
 \author{
-\strong{Maintainer}: Mauricio Vargas \email{mvargas@dcc.uchile.cl} (\href{https://orcid.org/0000-0003-1017-7574}{ORCID})
+\strong{Maintainer}: Mauricio Vargas \email{mavargas11@uc.cl} (\href{https://orcid.org/0000-0003-1017-7574}{ORCID})
 
 Other contributors:
 \itemize{

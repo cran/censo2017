@@ -1,12 +1,12 @@
 Package: censo2017
 Title: Base de Datos de Facil Acceso del Censo 2017 de Chile (2017
         Chilean Census Easy Access Database)
-Version: 0.5
+Version: 0.6.1
 Authors@R: c(
         person(given = "Mauricio",
                family = "Vargas",
                role = c("aut", "cre"),
-               email = "mvargas@dcc.uchile.cl",
+               email = "mavargas11@uc.cl",
                comment = c(ORCID = "0000-0003-1017-7574")),
         person(given = "Juan",
                family = "Correa",
@@ -41,7 +41,7 @@ Description: Provee un acceso conveniente a mas de 17 millones de registros
     DVD provided by the Chilean National Bureau of Statistics by using the
     REDATAM converter created by Pablo De Grande and in addition it includes the
     maps accompanying these datasets.)
-URL: https://github.com/ropensci/censo2017/
+URL: https://docs.ropensci.org/censo2017/
 BugReports: https://github.com/ropensci/censo2017/issues/
 License: CC0
 Encoding: UTF-8
@@ -49,10 +49,10 @@ LazyData: true
 RoxygenNote: 7.1.1
 Imports: DBI, duckdb, httr, tibble, purrr, cli, crayon, rstudioapi,
         tools
-Suggests: testthat, covr, knitr, dplyr, dbplyr, chilemapas
+Suggests: testthat, covr, knitr, dplyr, dbplyr, ggplot2, chilemapas
 Depends: R (>= 4.0)
 NeedsCompilation: no
-Packaged: 2021-05-09 21:18:54 UTC; pacha
+Packaged: 2021-08-15 21:47:21 UTC; pacha
 Author: Mauricio Vargas [aut, cre] (<https://orcid.org/0000-0003-1017-7574>),
   Juan Correa [ctb],
   Maria Paula Caldas [rev] (rOpenSci),
@@ -60,6 +60,6 @@ Author: Mauricio Vargas [aut, cre] (<https://orcid.org/0000-0003-1017-7574>),
   Melina Vidoni [rev] (rOpenSci),
   Constanza Manriquez [rev] (revision independiente de las vinietas),
   Instituto Nacional de Estadisticas (INE) [dtc]
-Maintainer: Mauricio Vargas <mvargas@dcc.uchile.cl>
+Maintainer: Mauricio Vargas <mavargas11@uc.cl>
 Repository: CRAN
-Date/Publication: 2021-05-10 04:32:15 UTC
+Date/Publication: 2021-08-16 15:30:14 UTC
