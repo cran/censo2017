@@ -4,19 +4,9 @@
 \name{censo2017-package}
 \alias{censo2017}
 \alias{censo2017-package}
-\title{censo2017: Base de Datos de Facil Acceso del Censo 2017 de Chile
-    (2017 Chilean Census Easy Access Database)}
+\title{censo2017: Base de Datos de Facil Acceso del Censo 2017 de Chile (2017 Chilean Census Easy Access Database)}
 \description{
-Provee un acceso conveniente a mas de 17 millones de registros
-    de la base de datos del Censo 2017. Los datos fueron importados desde
-    el DVD oficial del INE usando el Convertidor REDATAM creado por Pablo De
-    Grande. Esta paquete esta documentado intencionalmente en castellano
-    asciificado para que funcione sin problema en diferentes plataformas.
-    (Provides convenient access to more than 17 million records from the
-    Chilean Census 2017 database. The datasets were imported from the official
-    DVD provided by the Chilean National Bureau of Statistics by using the
-    REDATAM converter created by Pablo De Grande and in addition it includes the
-    maps accompanying these datasets.)
+Provee un acceso conveniente a mas de 17 millones de registros de la base de datos del Censo 2017. Los datos fueron importados desde el DVD oficial del INE usando el Convertidor REDATAM creado por Pablo De Grande. Esta paquete esta documentado intencionalmente en castellano asciificado para que funcione sin problema en diferentes plataformas. (Provides convenient access to more than 17 million records from the Chilean Census 2017 database. The datasets were imported from the official DVD provided by the Chilean National Bureau of Statistics by using the REDATAM converter created by Pablo De Grande and in addition it includes the maps accompanying these datasets.)
 }
 \seealso{
 Useful links:

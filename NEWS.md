@@ -1,3 +1,7 @@
+# Version 0.6
+
+- Allows to hide startup message
+
 # Version 0.5
 
 - Adds all of rOpenSci's suggestion, which means great improvements such as
